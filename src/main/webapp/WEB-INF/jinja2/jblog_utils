@@ -1,0 +1,41 @@
+{% macro post_short(post) %}
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <a class="panel-title" href="/jblog/posts/{{ post.getId() }}">
+            {{ post.getTitle() }}
+        </a>
+    </div>
+    <div class=panel-body>
+        {{ post.getContent()|truncate(50, True) }}
+    </div>
+</div>
+{% endmacro post_short %}
+
+{% macro post_long(post) %}
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h2 class="panel-title">{{ post.getTitle() }}</h2>
+    </div>
+    <div class="panel-body">{{ post.getContent() }}</div>
+    <div class="panel-footer text-right">
+        <div class="creation_at">
+            <b>Created at:</b> <em>{{ post.getCreationDate() }}</em>
+        </div>
+        {% if post.getLastEditionDate() %}
+        <div class="edited_at">
+            <b>Edited at:</b> <em>{{ post.getLastEditionDate() }}</em>
+        </div>
+        {% endif %}
+        {% if post.getTags() %}
+        <div class="tags">
+            <b>Tags:</b> <em>{{ post.getTags()|join(",") }}</em>
+        </div>
+        {% endif %}
+    </div>
+{% endmacro post_long %}
+
+{% macro feed(posts) %}
+    {% for post in posts %}
+        {{ post_short(post) }}
+    {% endfor %}
+{% endmacro feed %}
