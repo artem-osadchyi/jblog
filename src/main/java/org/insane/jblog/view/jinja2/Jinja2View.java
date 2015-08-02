@@ -32,7 +32,7 @@ import com.hubspot.jinjava.Jinjava;
  * @see #setExposeSpringMacroHelpers
  */
 public class Jinja2View extends AbstractTemplateView {
-    private Jinjava jinja2Engine = new Jinjava();
+    private Jinjava jinja2Engine;
 
     /**
      * Process the model map by merging it with the Jinja2 template. Output is
@@ -44,6 +44,13 @@ public class Jinja2View extends AbstractTemplateView {
     protected void renderMergedTemplateModel(Map<String, Object> model, HttpServletRequest request, HttpServletResponse response) throws Exception {
         exposeHelpers(model, request);
         doRender(model, request, response);
+    }
+
+    protected Jinjava getEngine() {
+        if (jinja2Engine == null)
+            jinja2Engine = getApplicationContext().getBean(Jinjava.class);
+
+        return jinja2Engine;
     }
 
     /**
@@ -160,7 +167,7 @@ public class Jinja2View extends AbstractTemplateView {
     protected void processTemplate(String template, Map<String, Object> model, HttpServletResponse response) throws IOException {
         PrintWriter output = response.getWriter();
 
-        output.write(jinja2Engine.render(template, model));
+        output.write(getEngine().render(template, model));
 
         output.flush();
     }
