@@ -1,0 +1,67 @@
+{% macro navbar_inactive_link(title, url) %}
+    <li><a href="{{ url }}">{{ title }}</a></li>
+{% endmacro navbar_inactive_link %}
+
+{% macro navbar_active_link(title, url) %}
+    <li class="active">
+        <a href="{{ url }}">
+            {{ title }}<span class="sr-only">(current)</span>
+        </a>
+    </li>
+{% endmacro navbar_active_link %}
+
+{% macro navbar_link(title, url, is_active=false) %}
+    {% if is_active %}
+        {{ navbar_active_link(title, url) }}
+    {% else %}
+        {{ navbar_inactive_link(title, url) }}
+    {% endif %}
+{% endmacro navbar_link %}
+
+{% macro navbar_brand_text(title, url) %}
+    <a class="navbar-brand" href="{{ url }}">{{ title }}</a>
+{% endmacro navbar_brand_text %}
+
+{% macro navbar_brand_image(image_url, url) %}
+    <a class="navbar-brand" href="{{ url }}">
+        <img alt="Brand" src="{{ image_url }}">
+    </a>
+{% endmacro navbar_brand_image %}
+
+{% macro navbar_nav(links, active=None) %}
+    <ul class="nav navbar-nav">
+        {% for link in links.items() %}
+            {{ navbar_link(link.getKey(), link.getValue(), link.getKey() == active) }}
+        {% endfor %}
+    </ul>
+{% endmacro navbar_nav %}
+
+{% macro navbar_toggle(title, data_target) %}
+    <button
+        type="button"
+        class="navbar-toggle collapsed"
+        data-toggle="collapse"
+        data-target="#bs-example-navbar-collapse-1"
+        aria-expanded="false"
+    >
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+    </button>
+{% endmacro navbar_toggle %}
+
+{% macro navbar(title=None, links=None, active_link=None) %}
+    <nav class="navbar navbar-default">
+        <div class="container">
+            <div class="navbar-header">
+                {{ bu.navbar_toggle("Toggle navigation", "/") }}
+                {{ navbar_brand_text(title, "/") if title }}
+            </div>
+            <div
+                class="collapse navbar-collapse"
+                id="bs-example-navbar-collapse-1"
+            >{{ navbar_nav(links, active_link) if links }}</div>
+        </div>
+    </nav>
+{% endmacro navbar %}
