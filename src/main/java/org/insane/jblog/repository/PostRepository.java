@@ -10,4 +10,6 @@ public interface PostRepository {
 
     List<Post> getAll();
 
+    void delete(long id);
+
 }

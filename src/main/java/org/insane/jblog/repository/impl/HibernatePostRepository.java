@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import org.insane.jblog.domain.Post;
 import org.insane.jblog.repository.PostRepository;
 import org.springframework.stereotype.Repository;
@@ -28,6 +29,24 @@ public class HibernatePostRepository implements PostRepository {
     public List<Post> getAll() {
         try (Session session = postSessionFactory.openSession()) {
             return session.createCriteria(Post.class).list();
+        }
+    }
+
+    @Override
+    public void delete(long id) {
+        try (Session session = postSessionFactory.openSession()) {
+            Transaction transaction = null;
+
+            try {
+                transaction = session.beginTransaction();
+
+                session.delete(session.load(Post.class, id));
+
+                transaction.commit();
+            } catch (Exception exception) {
+                if (transaction != null)
+                    transaction.rollback();
+            }
         }
     }
 

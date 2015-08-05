@@ -1,9 +1,14 @@
 {% macro post_short(post) %}
 <div class="panel panel-default">
     <div class="panel-heading">
-        <a class="panel-title" href="/jblog/posts/{{ post.getId() }}">
+        <a class="panel-title" href="/posts/{{ post.getId() }}">
             {{ post.getTitle() }}
         </a>
+        <div class="post-controls pull-right">
+            <a class="btn btn-link" href="/posts/delete/{{ post.getId() }}" role="button">
+                <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+            </a>
+        </div>
     </div>
     <div class=panel-body>
         {{ post.getContent()|truncate(50, True) }}

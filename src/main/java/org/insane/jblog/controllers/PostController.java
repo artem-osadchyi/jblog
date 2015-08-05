@@ -30,4 +30,11 @@ public class PostController {
         return "post";
     }
 
+    @RequestMapping("/delete/{id}")
+    public String delete(@PathVariable long id) {
+        repository.delete(id);
+
+        return "redirect:/posts";
+    }
+
 }
