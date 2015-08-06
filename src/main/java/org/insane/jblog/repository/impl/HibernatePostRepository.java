@@ -50,4 +50,26 @@ public class HibernatePostRepository implements PostRepository {
         }
     }
 
+    @Override
+    public Post save(Post post) {
+        try (Session session = postSessionFactory.openSession()) {
+            Transaction transaction = null;
+
+            try {
+                transaction = session.beginTransaction();
+
+                session.saveOrUpdate(post);
+
+                transaction.commit();
+            } catch (Exception exception) {
+                if (transaction != null)
+                    transaction.rollback();
+
+                throw exception;
+            }
+
+            return session.get(Post.class, post.getId());
+        }
+    }
+
 }

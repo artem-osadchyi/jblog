@@ -12,4 +12,6 @@ public interface PostRepository {
 
     void delete(long id);
 
+    Post save(Post post);
+
 }
